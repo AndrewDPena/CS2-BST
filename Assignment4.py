@@ -134,26 +134,15 @@ class binary_search_tree:
                 self.rebalance(values[mid+1:])
             return height
 
-    def delete(self, value):
-        target = self.find_tree(value)
-        if target:
-            return True
-        else:
-            return False
-
-    def find_tree(self, value):
-        if self.__value == value:
-            return self
-        elif value < self.__value:
-            if self.__left:
-                return self.__left.find_tree(value)
-            else:
-                return None
-        else:
-            if self.__right:
-                return self.__right.find_tree(value)
-            else:
-                return None
+    def remove(self, value):
+        # if self is the value to delete
+            # if this is a leaf, remove reference to self in parent
+            # if there isn't a left, replace self in the parent with the right
+            # if there isn't a right, replace self in the parent with the left
+            # tricky bit. first, find the right-most of the left hand tree
+            # and do a recursive call to remove it
+        # else if the value passed in is smaller, recurse to the left
+        # else recurse to the right
 
 class test_binary_search_tree (unittest.TestCase):
     '''
@@ -208,6 +197,16 @@ class test_binary_search_tree (unittest.TestCase):
         bt = binary_search_tree([15, 14, 11, 13, 12, 20, 16, 19, 17])
         bt.rebalance(bt.inorder())
         self.assertEqual(bt.preorder(), [15, 13, 12, 11, 14, 19, 17, 16, 20])
+
+    def test_double_recursion(self):
+        bt = BinaryTree([20, 10, 30, 25, 24, 27, 35])
+        bt.remove(30)
+        self.assertEqual(str(bt), '10,20,24,25,27,35')
+
+    def test_remove_root(self):
+        bt = BinaryTree([20, 10, 30, 25, 35])
+        bt.remove(20)
+        self.assertEqual(str(bt), '10,25,30,35')
 
 if '__main__' == __name__:
     unittest.main()
